@@ -13,6 +13,9 @@ DAGGER_VERSION := 0.6.1
 GALE_CMD     := $(CURDIR)/bin/gale
 GALE_VERSION := main
 
+MAGE_CMD     := $(CURDIR)/bin/mage
+MAGE_VERSION := latest
+
 ## ============================== Targets ==================================== ##
 
 .PHONY: lint
@@ -27,6 +30,22 @@ test: $(DAGGER_CMD) $(GALE_CMD);
 build: $(DAGGER_CMD) $(GALE_CMD);
 	@$(DAGGER_CMD) run $(GALE_CMD) --workflow ci --job build --disable-checkout --export
 
+.PHONY: mage.lint
+mage.lint: $(DAGGER_CMD) $(MAGE_CMD)
+	@$(DAGGER_CMD) run $(MAGE_CMD) lint
+
+.PHONY: mage.test
+mage.test:$(DAGGER_CMD) $(MAGE_CMD)
+	@$(DAGGER_CMD) run $(MAGE_CMD) test
+
+.PHONY: mage.build
+mage.build: $(DAGGER_CMD) $(MAGE_CMD)
+	@$(DAGGER_CMD) run $(MAGE_CMD) build
+
+.PHONY: mage.all
+mage.all: $(DAGGER_CMD) $(MAGE_CMD)
+	@$(DAGGER_CMD) run $(MAGE_CMD) go:all
+
 ## ============================ Dependencies ================================= ##
 
 $(DAGGER_CMD):
@@ -34,3 +53,6 @@ $(DAGGER_CMD):
 
 $(GALE_CMD):
 	@go install -v github.com/aweris/gale@$(GALE_VERSION)
+
+$(MAGE_CMD):
+	@go install -v github.com/magefile/mage@$(MAGE_VERSION)
