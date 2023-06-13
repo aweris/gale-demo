@@ -19,3 +19,6 @@ dist/
 
 # IDE files
 .idea/
+
+# OSX
+.DS_Store
