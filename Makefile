@@ -20,15 +20,15 @@ MAGE_VERSION := latest
 
 .PHONY: lint
 lint: $(DAGGER_CMD) $(GALE_CMD);
-	@$(DAGGER_CMD) run $(GALE_CMD) --workflow ci --job lint --disable-checkout --export
+	@$(DAGGER_CMD) run $(GALE_CMD) run ci lint --disable-checkout --export
 
 .PHONY: test
 test: $(DAGGER_CMD) $(GALE_CMD);
-	@$(DAGGER_CMD) run $(GALE_CMD) --workflow ci --job test --disable-checkout --export
+	@$(DAGGER_CMD) run $(GALE_CMD) run ci test --disable-checkout --export
 
 .PHONY: build
 build: $(DAGGER_CMD) $(GALE_CMD);
-	@$(DAGGER_CMD) run $(GALE_CMD) --workflow ci --job build --disable-checkout --export
+	@$(DAGGER_CMD) run $(GALE_CMD) run ci build --disable-checkout --export
 
 .PHONY: mage.lint
 mage.lint: $(DAGGER_CMD) $(MAGE_CMD)
