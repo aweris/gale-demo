@@ -56,10 +56,15 @@ and adds `test` and `lint` steps to customize the run.
 func (_ Go) All(ctx context.Context) error {
     client, err := dagger.Connect(ctx, dagger.WithLogOutput(os.Stdout))
     if err != nil {
-    return err
+        return err
     }
     
     _, err = gale.New(client). // Create a new gale instance with default container and given dagger client.
+        WithModifier(
+            func(container *dagger.Container) (*dagger.Container, error) {
+                return container.WithEnvVariable("RUNNER_DEBUG", "1"), nil
+            },
+        ). // Add a modifier to the container to enable debug logs.
         WithJob("ci", "build"). // Add `build` job from `ci` workflow to configuration.
         WithStep(&model.Step{ID: "0", Run: "echo 'Override checkout step'"}, true). // Override checkout step to execute current state of repository. This is assumes checkout step is the first step in the job without any id.
         WithStep(&model.Step{Run: "go test -v ./..."}, false). // Adds a new step to run tests.
