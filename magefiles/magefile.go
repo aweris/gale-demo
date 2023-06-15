@@ -23,7 +23,11 @@ func (_ Go) All(ctx context.Context) error {
 		return err
 	}
 
-	_, err = gale.New(client).
+	// use custom container with gale instead of default one
+
+	container := client.Container().From("ghcr.io/catthehacker/ubuntu:act-22.04")
+
+	_, err = gale.NewFromContainer(client, container).
 		WithJob("ci", "build").
 		WithStep(&model.Step{ID: "0", Run: "echo 'Override checkout step'"}, true). // Override checkout step to execute current state of repository.
 		WithStep(&model.Step{Run: "go test -v ./..."}, false).
